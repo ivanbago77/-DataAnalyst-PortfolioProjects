@@ -51,7 +51,7 @@ ORDER BY PercentPopulationInfected DESC
 
 SELECT Location, MAX(CAST(Total_Deaths AS INT)) AS TotalDeathCount
 FROM PortfolioProject..CovidDeaths
---WHERE Location LIKE '%states%'
+--WHERE Location LIKE '%states%' AND Continent IS NOT NULL
 WHERE Continent IS NOT NULL
 GROUP BY Location
 ORDER BY TotalDeathCount DESC
@@ -60,11 +60,11 @@ ORDER BY TotalDeathCount DESC
 
 --Showing continents with Highest Death Count per Population
 
-SELECT Continent, MAX(CAST(Total_Deaths AS INT)) AS TotalDeathCount
+SELECT Location, MAX(CAST(Total_Deaths AS INT)) AS TotalDeathCount
 FROM PortfolioProject..CovidDeaths
 --WHERE Location LIKE '%states%'
-WHERE Continent IS NOT NULL
-GROUP BY Continent
+WHERE Continent IS NULL
+GROUP BY Location
 ORDER BY TotalDeathCount DESC
 
 --GLOBAL  NUMBERS
@@ -99,7 +99,7 @@ SUM(CONVERT(INT,vac.New_Vaccinations)) OVER (PARTITION BY dea.Location ORDER BY 
 FROM PortfolioProject..CovidDeaths dea
 JOIN PortfolioProject..CovidVaccinations vac
 	ON dea.Location = vac.Location
-	and dea.Date = vac.Date
+	AND dea.Date = vac.Date
 WHERE dea.Continent IS NOT NULL
 --ORDER BY 2, 3
 )
@@ -132,6 +132,8 @@ JOIN PortfolioProject..CovidVaccinations vac
 --WHERE dea.Continent IS NOT NULL
 --ORDER BY 2, 3
 
+SELECT * FROM PercentPopulationVaccinated
+
 SELECT *, (RollingPeopleVaccinated/Population)*100 FROM #PercentPopulationVaccinated
 
 --Creating View to store data for later visualizations
@@ -143,5 +145,34 @@ SUM(CONVERT(INT, vac.New_Vaccinations)) OVER (PARTITION BY dea.Location ORDER BY
 FROM PortfolioProject..CovidDeaths dea
 JOIN PortfolioProject..CovidVaccinations vac
 	ON dea.Location = vac.Location
-	and dea.Date = vac.Date
+	AND dea.Date = vac.Date
 WHERE dea.Continent IS NOT NULL
+--ORDER BY 2,3
+
+--MY CONTRIBUTION TO THE PROJECT
+
+--Total Cases vs Population IN Croatia
+--Shows what percentage of population infected with COVID - 19
+
+SELECT Location, Date, Population, Total_Cases, (Total_Cases/Population)*100 AS PercentPopulationInfected
+FROM PortfolioProject..CovidDeaths
+WHERE location like '%Croatia%'
+ORDER BY 1, 2
+
+--New_Cases vs Total_Deaths IN Croatia
+
+SELECT YEAR(Date) AS 'Year', SUM(CONVERT(INT, New_Cases)) AS 'Total_Cases', SUM(CONVERT(INT, New_Deaths)) AS 'Total_Deaths' FROM PortfolioProject..CovidDeaths
+WHERE Location LIKE '%Coatia%' 
+GROUP BY YEAR(Date)
+
+SELECT * FROM PortfolioProject..CovidDeaths
+WHERE Location LIKE '%Croatia%' 
+
+--Total_Population vs Total_Vaccinations IN Croatia
+SELECT * FROM PortfolioProject..CovidVaccinations
+WHERE Location LIKE '%Croatia%' 
+
+SELECT YEAR(Date) AS 'Year', SUM(CONVERT(INT, Population)) AS 'Total_Tests', SUM(CONVERT(INT, New_Vaccinations)) AS 'Total_Vaccinations' FROM PortfolioProject..CovidDeaths
+WHERE Location LIKE '%Croatia%' 
+GROUP BY YEAR(Date)
+----------------------------------------------------------------------------------------------------------------------------------------
