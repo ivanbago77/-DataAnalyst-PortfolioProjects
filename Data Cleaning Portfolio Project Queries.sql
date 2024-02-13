@@ -29,7 +29,7 @@ SET SaleDateConverted = CONVERT(DATE,SaleDate)
 
 SELECT *
 FROM PortfolioProject.dbo.NashvilleHousing
---Where PropertyAddress IS NULL
+--WHERE PropertyAddress IS NULL
 --ORDER BY ParcelID
 
 SELECT a.ParcelID, a.PropertyAddress, b.ParcelID, b.PropertyAddress, ISNULL(a.PropertyAddress,b.PropertyAddress)
@@ -52,7 +52,7 @@ WHERE a.PropertyAddress IS NULL
 
 SELECT PropertyAddress
 FROM PortfolioProject.dbo.NashvilleHousing
---Where PropertyAddress is null
+--WHERE PropertyAddress is null
 --ORDER BY ParcelID
 
 SELECT
@@ -207,21 +207,3 @@ DROP COLUMN SaleDate
 --FROM OPENROWSET('Microsoft.ACE.OLEDB.12.0',
 --    'Excel 12.0; Database=C:\Users\alexf\OneDrive\Documents\SQL Server Management Studio\Nashville Housing Data for Data Cleaning Project.csv', [Sheet1$]);
 --GO
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
